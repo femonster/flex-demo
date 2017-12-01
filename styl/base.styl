@@ -1,0 +1,41 @@
+body
+	width 960px
+	margin 0 auto 30px
+	background-color #eee
+	strong
+		color red
+	.box
+		background-color #333
+		display -webkit-flex
+		display flex
+		width 100%
+		.item
+			width 150px 
+			height 150px
+			background-color #ffcd32
+			color #fff
+			text-align center
+			font-size 25px
+			line-height 150px
+			margin: 5px 0
+			border 1px solid #fff
+	.box1
+		flex-direction row
+	.box2
+		flex-wrap nowrap  
+	.box3
+		flex-flow row-reverse wrap
+	.box4
+		justify-content space-between
+	.box5
+		align-items baseline
+		.item:nth-child(2n+1)
+			height 200px
+	.box6
+		height 450px
+		flex-wrap wrap
+		align-content flex-start
+		.item:nth-child(2n+1)
+			height 200px
+	
+			
