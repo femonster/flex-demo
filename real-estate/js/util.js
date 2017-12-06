@@ -21,6 +21,10 @@ function hasClass(el, className) {
     return reg.test(el.className)
 }
 
+// Object.prototype.show=function(){
+//     this.style.display = "block"
+// }
+
 var preLoadObj = {
     imgUrlArr: [],
     //这里可以改正map对象http://www.cnblogs.com/sker/p/5520392.html
@@ -67,4 +71,18 @@ var preLoadObj = {
         }
         this.setProgress();
     },
+}
+
+function lazyLoad(src) {
+    return new Promise((resolve, reject) => {
+        var img = new Image;
+        img.onload = () => {
+            addProgress();
+            resolve();
+        }
+        img.onerror = () => {
+            reject();
+        }
+        img.src = src;
+    });
 }

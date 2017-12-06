@@ -18,9 +18,9 @@ var slider = {
     isloaded: false,
     options: {
         imgUrlArr: [
-            "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg",
-            "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg",
             "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/timg.jpg",
+            "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg",
+            "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg",
             "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/2.jpg"
         ],
         progressOverCallback: function() {
@@ -40,26 +40,25 @@ var slider = {
         var str = "";
         oSliderBox = document.querySelector(".slider-box");
         for (var i = 0; i < p; i++) {
+            // str += "<li class='s-item'></li>";
             str += '<li class="s-item">\
                         <img src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg" alt="">\
                     </li>';
         }
-        //     var str = '<ul class="slider-box">\
-        //     <li class="s-item">\
-        //         <img src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg" alt="">\
-        //     </li>\
-        //     <li class="s-item">\
-        //         <img src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg" alt="">\
-        //     </li>\
-        //     <li class="s-item">\
-        //         <img src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg" alt="">\
-        //     </li>\
-        //     <li class="s-item">\
-        //         <img src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/2.jpg" alt="">\
-        //     </li>\
-        // </ul>';
+
         oSliderBox.innerHTML = str;
         aSliderItem = document.querySelectorAll(".s-item");
+        var boxH = document.querySelector(".show-img").clientHeight;
+        console.log(boxH);
+        for (var i = 0; i < aSliderItem.length; i++) {
+            var osliderImg = aSliderItem[i].children[0];
+            console.log(osliderImg.offsetHeight);
+            if (osliderImg.offsetHeight > boxH) {
+                osliderImg.style.height = boxH + "px";
+            } else {
+                osliderImg.style.width = document.body.offsetWidth + "px";
+            }
+        }
         // console.log(aSliderItem);
         // aSliderItem = oSliderBox.children;
         setSliderWidth(aSliderItem);
@@ -221,7 +220,10 @@ window.onload = function() {
         oMaskBox.style.display = 'block';
         document.body.className = "lock";
         oImgNums.innerText = i + "/" + len;
-        slider.render(len);
+        if (slider.isloaded) {
+            slider.render(len);
+
+        }
         var oSliderWrap = document.querySelector(".show-img");
         scroll = new BScroll(oSliderWrap, {
             scrollX: true,
@@ -274,6 +276,4 @@ window.onload = function() {
     oBack.addEventListener("click", function(e) {
         hideMask();
     })
-
-
 }

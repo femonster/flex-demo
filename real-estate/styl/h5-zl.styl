@@ -14,6 +14,7 @@ a
     color: rgb(59,157,241)
 body
     opacity: 0
+    font-family: SF UI Text,Helvetica,Arial,sans-serif !important;
 .lock
     overflow hidden
 .nav-top
@@ -166,13 +167,15 @@ body
         width: ptr(15)
         height: ptr(15)
         background: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/hyperlink-2x.png") no-repeat center/contain
+        vertical-align: middle
 .img-comment
     margin-top: ptr(15)
 .one-img
     .img-item 
         width: 100%
         height: ptr(180)
-        background-image: url(http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg)
+        background-color: rgb(215,215,215)
+        // background-image: url(http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg)
         background-position: center 
         background-size: cover
         background-repeat: no-repeat
@@ -186,11 +189,12 @@ body
         width:ptr(165)
         height: ptr(165)
         border-radius: ptr(2)
-        margin-bottom: ptr(5)    
+        margin-bottom: ptr(5)
+        background-color: rgb(215,215,215)   
         background-position: center 
         background-size: cover
         background-repeat: no-repeat
-        background-image: url(http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg)
+        // background-image: url(http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg)
         &:nth-of-type(odd)
             margin-right: ptr(5)
 .three-img
@@ -202,10 +206,11 @@ body
         height: ptr(108)
         margin-bottom: ptr(5)
         border-radius: ptr(2)
+        background-color: rgb(215,215,215)
         background-position: center 
         background-size: cover
         background-repeat: no-repeat
-        background-image: url(http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg)
+        // background-image: url(http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg)
         &:not(:nth-of-type(3n))
             margin-right: ptr(5)   
         .more-mask
@@ -250,7 +255,7 @@ body
     bottom: 0
     left: 0
     z-index: 100
-    border-top: 1px solid rgb(198,200,209)
+    border-top: 1px solid #EBECF1
     box-sizing: border-box
     background-color: rgba(255,255,255,0.9)  
     padding-left ptr(20)
@@ -327,6 +332,7 @@ body
         background-size: cover
         top: ptr(30)
         left: ptr(20)
+        z-index: 300
     .img-nums
         font-size: ptr(18)
         width: 100%
@@ -343,12 +349,18 @@ body
         text-align: center
         .slider-box
             min-height: 100%
+            display: -webkit-box 
+            display: -webkit-flex
+            display: flex
+            -webkit-box-align: center
+            -webkit-align-items:center
+            align-items: center
             .s-item
                 float left
                 // width: ptr(375)
                 img 
-                    width: 100%
-                    margin-top: 100px
+                    // width: 100%
+                    // margin-top: 100px
     .footer
         border: none
         background-color: #000;
@@ -365,3 +377,6 @@ body
                 background-image:url('http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/enterIconThumbUp2-2x.png')
             .i-share
                 background-image:url('http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/navShare2-2x.png')
+    
+    .footer-up
+        animation 
