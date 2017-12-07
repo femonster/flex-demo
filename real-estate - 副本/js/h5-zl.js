@@ -27,16 +27,13 @@ var slider = {
     isrender: false,
     scroll: null,
     imgArr: [], //{w:1,h:1,url:1}
-    myimgs:[],
-    othimgs:[],
     render: function(p, sArr) {
-        var self = this;
         var str = "";
         var count = 0;
         var boxW = document.documentElement.clientWidth || document.body.clientWidth;
         var boxH = document.querySelector(".show-img").clientHeight;
         for (var i = 0; i < p; i++) {
-            str += '<li class="s-item" data-url=' + sArr[i].url + '><img src="img/loading.gif" width="50" height="50"/></li>';
+            str += '<li class="s-item" data-w=' + sArr[i].w + ' data-h=' + sArr[i].h + ' data-url=' + sArr[i].url + '><img src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif" width="50" height="50"/></li>';
         }
         oSliderBox.innerHTML = str;
         // if (!this.isrenderW) {
@@ -47,20 +44,22 @@ var slider = {
         var aLi = Array.prototype.slice.call(aSliderLi);
         aLi.forEach(function(item, index) {
             var oimg = new Image();
+            var w = Number(item.dataset.w);
+            var h = Number(item.dataset.h);
             oimg.src = item.dataset.url;
+            if (h > boxH) {
+                oimg.height = boxH;
+                // oimg.style.height = boxH + "px";
+            } else {
+                oimg.width = boxW;
+                // oimg.style.width = boxW + "px";
+            }
             oimg.onload = function() {
-                var w = oimg.width;
-                var h = oimg.height;
-                if (h > boxH) {
-                    oimg.style.height = boxH + "px";
-                } else {
-                    oimg.style.width = boxW + "px";
-                }
                 aSliderLi[index].innerHTML = "";
                 aSliderLi[index].appendChild(oimg);
-                
             }
         });
+        // this.isrender = false;
     },
     setSliderWidth(aSliderItem) {
         var oSliderBox = document.querySelector(".slider-box");
@@ -83,9 +82,9 @@ var slider = {
         for (var j = 0; j < achild.length; j++) {
             var temp = achild[j];
             this.imgArr.push({
-                // "w": temp.dataset.width||0,
-                // "h": temp.dataset.height||0,
-                "url": temp.dataset.echoBackground,
+                "w": temp.dataset.width,
+                "h": temp.dataset.height,
+                "url": temp.dataset.url,
                 "loading": "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif"
             })
         }
@@ -155,7 +154,7 @@ var slider = {
 //                 slider.hideMask();
 //             })
 //     })
-// window.onload = function() {
+window.onload = function() {
     // oBody.addEventListener("click", function(e) {
 
     //     })
@@ -188,4 +187,4 @@ var slider = {
         slider.hideMask();
     })
 
-// }
+}

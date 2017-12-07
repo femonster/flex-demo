@@ -1,13 +1,13 @@
 var tempImgs = [
-    "img/1.jpg",
-    "img/2.jpg",
-    "img/timg.jpg",
-    "img/hyperlink-2x.png",
-    "img/listComment.png",
-    "img/listMore.png",
-    "img/navShare2.png",
-    "img/navShare2-2x.png",
-    "img/navArrowBack1.png"
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/2.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/timg.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/hyperlink-2x.png",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/listComment.png",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/listMore.png",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/navShare2.png",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/navShare2-2x.png",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/navArrowBack1.png"
 ]
 
 function forshow() {
@@ -43,25 +43,25 @@ function forshow() {
             }
             for (var i = 0; i < params - more; i++) {
                 //str += '<div class="img-item" data-i=' + (i + 1) + ' style="background-image:url(' + tempImgs[i] + ')"></div>';
-                str += '<div class="img-item" data-i=' + (i + 1) + ' data-echo-background='+tempImgs[i]+'></div>';
+                str += '<div class="img-item" data-i=' + (i + 1) + '></div>';
             }
             myBox.innerHTML = str;
             var miLen = myBox.children.length;
             // console.log(miLen, myBox.children);
             var count = 0;
-            // tempImgs.forEach(function(item, index) {
-            //     if (index <= miLen - 1) {
-            //         var img = new Image();
-            //         img.src = item;
-            //         img.onload = function() {
-            //             myBox.children[count].dataset.width = img.width;
-            //             myBox.children[count].dataset.height = img.height;
-            //             myBox.children[count].dataset.url = img.src;
-            //             myBox.children[count].style.backgroundImage = "url(" + item + ")"
-            //             count++;
-            //         }
-            //     }
-            // })
+            tempImgs.forEach(function(item, index) {
+                if (index <= miLen - 1) {
+                    var img = new Image();
+                    img.src = item;
+                    img.onload = function() {
+                        myBox.children[count].dataset.width = img.width;
+                        myBox.children[count].dataset.height = img.height;
+                        myBox.children[count].dataset.url = img.src;
+                        myBox.children[count].style.backgroundImage = "url(" + item + ")"
+                        count++;
+                    }
+                }
+            })
 
             if (hasClass(myBox, "more-img")) {
                 myBox.lastChild.innerHTML = '<div class="more-mask">+' + more + '</div>';
@@ -101,27 +101,27 @@ function forshow() {
                     more = param2 - 9;
             }
             for (var i = 0; i < param2 - more; i++) {
-                str2 += '<div class="img-item" data-i=' + (i + 1) + ' data-echo-background='+tempImgs[i]+'></div>';
+                str2 += '<div class="img-item" data-i=' + (i + 1) + '></div>';
             }
             otherbox.innerHTML = str2;
-            // var oiLen = otherbox.children.length;
+            var oiLen = otherbox.children.length;
             // console.log(oiLen, otherbox.children);
-            // var count2 = 0;
-            // tempImgs.forEach(function(item, index) {
-            //     if (index <= oiLen - 1) {
-            //         var img = new Image();
-            //         img.src = item;
-            //         img.onload = function() {
-            //             // console.log(count2);
-            //             otherbox.children[count2].dataset.width = img.width;
-            //             otherbox.children[count2].dataset.height = img.height;
-            //             otherbox.children[count2].dataset.url = img.src;
-            //             otherbox.children[count2].style.backgroundImage = "url(" + item + ")"
-            //             count2++;
-            //         }
-            //     }
+            var count2 = 0;
+            tempImgs.forEach(function(item, index) {
+                if (index <= oiLen - 1) {
+                    var img = new Image();
+                    img.src = item;
+                    img.onload = function() {
+                        // console.log(count2);
+                        otherbox.children[count2].dataset.width = img.width;
+                        otherbox.children[count2].dataset.height = img.height;
+                        otherbox.children[count2].dataset.url = img.src;
+                        otherbox.children[count2].style.backgroundImage = "url(" + item + ")"
+                        count2++;
+                    }
+                }
 
-            // })
+            })
             if (hasClass(otherbox, "more-img")) {
                 otherbox.lastChild.innerHTML = '<div class="more-mask">+' + more + '</div>';
             }
@@ -148,9 +148,5 @@ function forshow() {
         }
     }
 }
-echo.init({
-    callback:function(res){
-        // console.log(res);
-    }
-});
+
 forshow();
