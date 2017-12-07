@@ -5,6 +5,7 @@ var oOtherImgsBoxs = document.querySelector(".other-img-com");
 var oBody = document.body;
 var oSliderBox = document.querySelector(".slider-box");
 var oBack = document.querySelector(".i-back");
+
 var slider = {
     mySliderNum: function() {
         var tmp = Number(getQueryString("m"));
@@ -27,38 +28,36 @@ var slider = {
     isrender: false,
     scroll: null,
     imgArr: [], //{w:1,h:1,url:1}
-    myimgs:[],
-    othimgs:[],
     render: function(p, sArr) {
-        var self = this;
         var str = "";
         var count = 0;
         var boxW = document.documentElement.clientWidth || document.body.clientWidth;
         var boxH = document.querySelector(".show-img").clientHeight;
         for (var i = 0; i < p; i++) {
-            str += '<li class="s-item" data-url=' + sArr[i].url + '><img src="img/loading.gif" width="50" height="50"/></li>';
+            str += '<li class="s-item" data-url=' + sArr[i].url + '><img class="loading" src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif" width="50" height="50"/></li>';
         }
         oSliderBox.innerHTML = str;
-        // if (!this.isrenderW) {
         var aSliderLi = document.querySelectorAll(".s-item");
         this.setSliderWidth(aSliderLi);
-        // this.isrenderW = true;
-        // }
+
         var aLi = Array.prototype.slice.call(aSliderLi);
         aLi.forEach(function(item, index) {
             var oimg = new Image();
             oimg.src = item.dataset.url;
+
             oimg.onload = function() {
                 var w = oimg.width;
                 var h = oimg.height;
+
+                aSliderLi[index].innerHTML = "";
+                aSliderLi[index].appendChild(oimg);
                 if (h > boxH) {
                     oimg.style.height = boxH + "px";
+
                 } else {
                     oimg.style.width = boxW + "px";
                 }
-                aSliderLi[index].innerHTML = "";
-                aSliderLi[index].appendChild(oimg);
-                
+
             }
         });
     },
@@ -83,9 +82,9 @@ var slider = {
         for (var j = 0; j < achild.length; j++) {
             var temp = achild[j];
             this.imgArr.push({
-                // "w": temp.dataset.width||0,
-                // "h": temp.dataset.height||0,
-                "url": temp.dataset.echoBackground,
+                // "w": temp.dataset.width,
+                // "h": temp.dataset.height,
+                "url": temp.dataset.bg,
                 "loading": "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif"
             })
         }
@@ -107,7 +106,7 @@ var slider = {
         var oSliderWrap = document.querySelector(".show-img");
         self.scroll = new BScroll(oSliderWrap, {
             scrollX: true,
-            scrollY: true,
+            scrollY: false,
             momentum: false,
             snap: {
                 loop: false,
@@ -156,10 +155,19 @@ var slider = {
 //             })
 //     })
 // window.onload = function() {
-    // oBody.addEventListener("click", function(e) {
+// oBody.addEventListener("click", function(e) {
 
-    //     })
-    // 点击我的相册照片
+//     })
+
+window.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("click", function(e) {
+            console.log("all");
+            if (hasClass(e.target, "download")) {
+                e.stopPropagation();
+                alert("请前往APP store下载");
+            }
+        })
+        // 点击我的相册照片
     oImgsBox.addEventListener("click", function(e) {
             var _this = this;
             if (e.target.className == "img-item") {
@@ -187,5 +195,9 @@ var slider = {
     oBack.addEventListener("click", function(e) {
         slider.hideMask();
     })
+
+})
+
+
 
 // }

@@ -72,6 +72,7 @@ body {
   font-size: 0.238933333333333rem;
   background-color: #3b9df1;
   margin-top: 0.256rem;
+  animation: bgshadow 1s 5 1s;
 }
 .sec-box {
   margin-top: 1.024rem;
@@ -103,14 +104,17 @@ body {
   height: 0.597333333333333rem;
   margin: 0 0.170666666666667rem 0 0;
 }
+.sec-box .other-article .one-img .item-box,
 .sec-box .other-article .one-img .img-item {
   width: 100%;
   height: 2.645333333333334rem;
 }
+.sec-box .other-article .two-img .item-box,
 .sec-box .other-article .two-img .img-item {
   width: 2.628266666666667rem;
   height: 2.628266666666667rem;
 }
+.sec-box .other-article .three-img .item-box,
 .sec-box .other-article .three-img .img-item {
   width: 1.723733333333333rem;
   height: 1.723733333333333rem;
@@ -153,7 +157,7 @@ body {
   height: 0.682666666666667rem;
   border-radius: 50%;
   background: #333;
-  background-image: url("../img/2.jpg");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/2.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -188,7 +192,7 @@ body {
   right: 0;
   width: 0.3rem;
   height: 0.82rem;
-  background: url("../img/listMore-2x.png") no-repeat center/contain;
+  background: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/listMore-2x.png") no-repeat center/contain;
 }
 .text-comment {
   font-size: 0.238933333333333rem;
@@ -201,13 +205,20 @@ body {
   display: inline-block;
   width: 0.256rem;
   height: 0.256rem;
-  background: url("../img/hyperlink-2x.png") no-repeat center/contain;
+  background: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/hyperlink-2x.png") no-repeat center/contain;
   vertical-align: middle;
 }
 .img-comment {
   margin-top: 0.256rem;
 }
-.one-img .img-item {
+.one-img .item-box {
+  background-color: #d7d7d7;
+  width: 100%;
+  height: 3.072000000000001rem;
+}
+.one-img .item-box .img-item {
+  transition: opacity 1s;
+  opacity: 0;
   width: 100%;
   height: 3.072000000000001rem;
   background-color: #d7d7d7;
@@ -219,7 +230,7 @@ body {
 .two-img {
   font-size: 0;
 }
-.two-img .img-item {
+.two-img .item-box {
   display: inline-block;
   vertical-align: top;
   width: 2.816rem;
@@ -227,17 +238,24 @@ body {
   border-radius: 0.034133333333333rem;
   margin-bottom: 0.085333333333333rem;
   background-color: #d7d7d7;
+}
+.two-img .item-box:nth-of-type(odd) {
+  margin-right: 0.085333333333333rem;
+}
+.two-img .item-box .img-item {
+  opacity: 0;
+  transition: opacity 1s;
+  width: 2.816rem;
+  height: 2.816rem;
+  border-radius: 0.034133333333333rem;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
-.two-img .img-item:nth-of-type(odd) {
-  margin-right: 0.085333333333333rem;
-}
 .three-img {
   font-size: 0;
 }
-.three-img .img-item {
+.three-img .item-box {
   display: inline-block;
   vertical-align: top;
   width: 1.8432rem;
@@ -245,12 +263,19 @@ body {
   margin-bottom: 0.085333333333333rem;
   border-radius: 0.034133333333333rem;
   background-color: #d7d7d7;
+}
+.three-img .item-box:not(:nth-of-type(3n)) {
+  margin-right: 0.085333333333333rem;
+}
+.three-img .img-item {
+  opacity: 0;
+  transition: opacity 1.5s;
+  width: 1.8432rem;
+  height: 1.8432rem;
+  border-radius: 0.034133333333333rem;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-}
-.three-img .img-item:not(:nth-of-type(3n)) {
-  margin-right: 0.085333333333333rem;
 }
 .three-img .img-item .more-mask {
   width: 100%;
@@ -334,7 +359,7 @@ body {
   display: inline-block;
   width: 0.750933333333333rem;
   height: 0.750933333333333rem;
-  background-image: url("../img/enterIconEmoticon1-2x.png");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/enterIconEmoticon1-2x.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 0.4096rem 0.4096rem;
@@ -350,13 +375,13 @@ body {
   margin-top: 0.136533333333333rem;
 }
 .footer .com-icon .i-good {
-  background-image: url("../img/enterIconThumbUp1-2x.png");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/enterIconThumbUp1-2x.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 0.4096rem 0.4096rem;
 }
 .footer .com-icon .i-share {
-  background-image: url("../img/navShare1-2x.png");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/navShare1-2x.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 0.4096rem 0.4096rem;
@@ -379,7 +404,7 @@ body {
 .mask-box .i-back {
   width: 0.4096rem;
   height: 0.4096rem;
-  background-image: url("../img/navArrowBack1-2x.png");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/navArrowBack1-2x.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -425,14 +450,66 @@ body {
   color: #fff;
 }
 .mask-box .footer .com-input .i-emoji {
-  background-image: url("../img/enterIconEmoticon4-2x.png");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/enterIconEmoticon4-2x.png");
 }
 .mask-box .footer .com-icon {
   background-color: #000;
 }
 .mask-box .footer .com-icon .i-good {
-  background-image: url("../img/enterIconThumbUp2-2x.png");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/enterIconThumbUp2-2x.png");
 }
 .mask-box .footer .com-icon .i-share {
-  background-image: url("../img/navShare2-2x.png");
+  background-image: url("http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/navShare2-2x.png");
+}
+@-moz-keyframes bgshadow {
+  0% {
+    background-color: #3b9df1;
+  }
+  50% {
+    background-color: #4facfe;
+    box-shadow: 0 0 0.324266666666667rem #4facfe;
+    -webkit-box-shadow: 0 0 0.324266666666667rem #4facfe;
+  }
+  100% {
+    background-color: #3b9df1;
+  }
+}
+@-webkit-keyframes bgshadow {
+  0% {
+    background-color: #3b9df1;
+  }
+  50% {
+    background-color: #4facfe;
+    box-shadow: 0 0 0.324266666666667rem #4facfe;
+    -webkit-box-shadow: 0 0 0.324266666666667rem #4facfe;
+  }
+  100% {
+    background-color: #3b9df1;
+  }
+}
+@-o-keyframes bgshadow {
+  0% {
+    background-color: #3b9df1;
+  }
+  50% {
+    background-color: #4facfe;
+    box-shadow: 0 0 0.324266666666667rem #4facfe;
+    -webkit-box-shadow: 0 0 0.324266666666667rem #4facfe;
+  }
+  100% {
+    background-color: #3b9df1;
+  }
+}
+@keyframes bgshadow {
+  0% {
+    background-color: #3b9df1;
+  }
+  50% {
+    background-color: #4facfe;
+    box-shadow: 0 0 0.324266666666667rem #4facfe;
+    -webkit-box-shadow: 0 0 0.324266666666667rem #4facfe;
+  }
+  100% {
+    background-color: #3b9df1;
+  }
 }
