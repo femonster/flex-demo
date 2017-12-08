@@ -24,6 +24,9 @@ var slider = {
             return tmp;
         }
     },
+    isloaded: false,
+    isrenderW: false,
+    isrender: false,
     scroll: null,
     imgArr: [], //{w:1,h:1,url:1}
     render: function(p, sArr) {
@@ -33,19 +36,8 @@ var slider = {
         var boxW = document.documentElement.clientWidth || document.body.clientWidth;
         var boxH = document.querySelector(".show-img").clientHeight;
         var navW = ((boxW - 10) / p) > navBox.clientHeight ? navBox.clientHeight - 10 : ((boxW - 10) / p);
-        var rurl;
-
         for (var i = 0; i < p; i++) {
-            if (sArr[i].isload == 1) {
-                str += '<li class="s-item"><img></img src="' + sArr[i].blobUrl + '"></li>';
-            } else {
-                str += '<li class="s-item" data-url=' + sArr[i].originUrl + '>\
-                            <svg width="110" height="110" viewbox="0 0 350 350">\
-                                <circle cx="170" cy="170" r="43" stroke="#D1D3D7" stroke-width="12" fill="none"></circle>\
-                                <circle cx="170" cy="170" r="43" stroke="#00A5E0" stroke-width="12" fill="none" class="changecircle" stroke-dasharray="0 1069"  transform="matrix(0,-1,1,0,0,110)"></circle>\
-                            </svg>\
-                        </li>';
-            }
+            str += '<li class="s-item" data-url=' + sArr[i].url + '><img class="loading" src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif" width="50" height="50"/></li>';
             navStr += '<div class="img-nav" style="width:' + navW + 'px;height:' + navW + 'px;background-image:url(' + sArr[i].url + ')" data-index=' + i + '></div>';
         }
         oSliderBox.innerHTML = str;
@@ -55,9 +47,6 @@ var slider = {
 
         var aLi = Array.prototype.slice.call(aSliderLi);
         aLi.forEach(function(item, index) {
-            if (item.children.typeName != "IMG") {
-
-            }
             var oimg = new Image();
             oimg.src = item.dataset.url;
             oimg.onload = function() {
@@ -100,12 +89,8 @@ var slider = {
         for (var j = 0; j < achild.length; j++) {
             var temp = achild[j];
             this.imgArr.push({
-                index: temp.dataset.i,
-                isload: temp.dataset.isload,
-                width: temp.dataset.w,
-                height: temp.dataset.h,
-                originUrl: temp.dataset.echoBackground,
-                blobUrl: temp.getAttribute("src")
+                "url": temp.dataset.bg,
+                "loading": "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif"
             })
         }
         this._initSlider(i, len, this.imgArr);
@@ -119,7 +104,6 @@ var slider = {
     },
     // 初始化slider
     _initSlider: function(i, len, sArr) {
-        console.log(sArr);
         var self = this;
         self.render(len, sArr);
         var oSliderWrap = document.querySelector(".show-img");
@@ -166,17 +150,7 @@ window.addEventListener("DOMContentLoaded", function() {
     oImgsBox.addEventListener("click", function(e) {
             var _this = this;
             if (e.target.className == "img-item") {
-                var oImgDiv = e.target;
-                var options = {
-                    index: oImgDiv.dataset.i,
-                    isload: oImgDiv.dataset.isload,
-                    width: oImgDiv.dataset.w,
-                    height: oImgDiv.dataset.h,
-                    originUrl: oImgDiv.dataset.echoBackground,
-                    blobUrl: oImgDiv.getAttribute("src")
-                };
                 var index = e.target.dataset.i;
-                // var isload = e.target.dataset.i
                 slider.showMask(index, slider.mySliderNum(), _this);
             }
             if (e.target.className == "more-mask") {

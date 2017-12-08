@@ -1,15 +1,13 @@
 var tempImgs = [
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/2.jpg',
-    'http://img.zcool.cn/community/019c04577f1e570000018c1bad9d13.jpg@900w_1l_2o_100sh.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/3.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/4.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/5.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/6.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/7.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/8.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/9.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/10.jpg',
-    'https://raw.githubusercontent.com/muyake/muyake.github.io/master/img/11.jpg'
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/1.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/2.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/timg.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/3.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/4.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/5.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/7.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/8.jpg",
+    "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/9.jpg"
 ]
 
 function forshow() {
@@ -44,14 +42,19 @@ function forshow() {
                     more = params - 9;
             }
             for (var i = 0; i < params - more; i++) {
-                str += '<div class="item-box" data-bg=' + tempImgs[i] + '><div class="img-item" data-i=' + (i + 1) + ' data-echo-background=' + tempImgs[i] + ' data-isload=0></div></div>';
+                //str += '<div class="img-item" data-i=' + (i + 1) + ' style="background-image:url(' + tempImgs[i] + ')"></div>';
+                //str += '<div class="img-item" data-i=' + (i + 1) + '></div>';
+                str += '<div class="item-box" data-bg=' + tempImgs[i] + '><div class="img-item" data-i=' + (i + 1) + ' data-echo-background=' + tempImgs[i] + '></div></div>';
 
             }
             myBox.innerHTML = str;
+
             if (hasClass(myBox, "more-img")) {
+                console.log(myBox.lastChild.children);
                 myBox.lastChild.children[0].innerHTML = '<div class="more-mask">+' + more + '</div>';
             }
         }
+
     }
 
     if (getQueryString("o")) {
@@ -85,14 +88,19 @@ function forshow() {
                     more = param2 - 9;
             }
             for (var i = 0; i < param2 - more; i++) {
-                str2 += '<div class="item-box" data-bg=' + tempImgs[i] + ' data-isload="0"><div class="img-item" data-i=' + (i + 1) + ' data-echo-background=' + tempImgs[i] + '></div></div>';
+                // str2 += '<div class="img-item" data-i=' + (i + 1) + '></div>';
+                str2 += '<div class="item-box" data-bg=' + tempImgs[i] + '><div class="img-item" data-i=' + (i + 1) + ' data-echo-background=' + tempImgs[i] + '></div></div>';
 
             }
             otherbox.innerHTML = str2;
             if (hasClass(otherbox, "more-img")) {
                 otherbox.lastChild.children[0].innerHTML = '<div class="more-mask">+' + more + '</div>';
             }
+            // iLen2 = otherbox.children.length;
+
         }
+
+
     }
 
     if (getQueryString("n")) {
@@ -112,10 +120,10 @@ function forshow() {
     }
 }
 
-// echo.init({
-//     callback: function(res) {
-//         res.style.opacity = 1;
-//     }
-// });
+echo.init({
+    callback: function(res) {
+        res.style.opacity = 1;
+    }
+});
 
 forshow();

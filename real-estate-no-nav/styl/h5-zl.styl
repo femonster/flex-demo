@@ -18,9 +18,9 @@ body
 .lock
     overflow hidden
 .nav-top
-    height ptr(60)
-    border-bottom 1px solid #dfe0e5
-    font-size 0
+    height: ptr(60)
+    border-bottom: 1px solid #dfe0e5
+    font-size: 0
     background-color #fff
     position fixed
     top 0
@@ -30,7 +30,7 @@ body
         display: inline-block
         height: 100%
         vertical-align: top
-        background-color: #fff
+        background-color #fff
     .nav-l
         width: 73.2%
         box-sizing: border-box
@@ -353,14 +353,6 @@ body
     left: 0
     right: 0
     background-color: #000000
-    svg 
-        position: absolute
-        top: 50%
-        left: 50%
-        transform: translate(-50%,-50%)    
-        .circle
-            -webkit-transition: stroke-dasharray .1s
-            transition: stroke-dasharray .1s
     .i-back,.img-nums
         position: absolute
     .i-back
@@ -381,7 +373,7 @@ body
         top: ptr(43)
     .show-img
         width: 100%
-        height: ptr(430)
+        height: ptr(500)
         margin-top: ptr(84)
         box-sizing: border-box
         // border:1px solid red
@@ -405,31 +397,9 @@ body
                     // transform-origin: center center;
                     // width: 100%
                     // margin-top: 100px
-    .img-nav-box
-        width: 100%
-        height: ptr(65)
-        font-size: 0
-        text-align: center
-        margin-top: ptr(10)
-        // background-color: green
-        display flex
-        justify-content: center
-        align-items: center
-        div
-            display: inline-block
-            box-sizing: border-box
-            border: ptr(3) solid #000000
-            // border-right: ptr(3) solid #000000            
-            background-color: rgb(215,215,215)
-            background-size: cover
-            background-position: center
-            background-repeat: no-repeat 
-        .active
-            border: ptr(3) solid #ffffff
-            
     .footer
         border: none
-        background-color: #000
+        background-color: #000;
         .com-input
             background-color: #000
             input 
