@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <title>Document</title>
+</head>
+<style>
+    circle {
+        -webkit-transition: stroke-dasharray .1s;
+        transition: stroke-dasharray .1s;
+    }
+</style>
+
+<body>
+    <!-- <svg width="110" height="110" viewbox="0 0 340 340">
+        <circle cx="170" cy="170" r="43" stroke="#D1D3D7" stroke-width="12" fill="none"></circle>
+        <circle cx="170" cy="170" r="43" stroke="#00A5E0" stroke-width="12" fill="none" class="changecircle" stroke-dasharray="0 1069"  transform="matrix(0,-1,1,0,0,110)"></circle>
+    </svg> -->
+    <svg width="50" height="50" viewbox="0 0 50 50">
+            <circle cx="25" cy="25" r="18" stroke-width="6" stroke="#D1D3D7" fill="none"></circle>
+            <circle cx="85" cy="25" r="18" stroke-width="6" stroke="#00A5E0" fill="none" class="changecircle" transform="matrix(0,-1,1,0,0,110)" stroke-dasharray="0 1069"></circle>
+        </svg>
+    <img src="" alt="" id="load-img">
+    <!-- <p>拖我：
+        <input id="range" type="range" min="0" max="100" value="0" style="width:300px;">
+    </p> -->
+</body>
+<script>
+    // if (window.addEventListener) {
+    //     var range = document.querySelector("#range"),
+    //         circle = document.querySelector(".changecircle");
+    //     if (range && circle) {
+    //         range.addEventListener("change", function() {
+    //             var percent = this.value / 100,
+    //                 perimeter = Math.PI * 2 * 43;
+    //             circle.setAttribute('stroke-dasharray', perimeter * percent + " " + perimeter * (1 - percent));
+    //         });
+    //     }
+    // }
+
+    function progressfn(load, total) {
+        var percent = load / total,
+            perimeter = Math.PI * 2 * 43,
+            circle = document.querySelector(".changecircle");
+        circle.setAttribute("stroke-dasharray", perimeter * percent + " " + perimeter * (1 - percent));
+        // console.log("===正在加载===");
+    }
+
+    function loadFinish(url) {
+        console.time("给src赋值耗时");
+        var img = new Image();
+        img.onload = function() {
+            window.URL.revokeObjectURL(url);
+            console.log("===imgWidth===", this.width);
+        }
+        img.src = url;
+        document.body.appendChild(img);
+    }
+
+    function loadImage(url, fn, progtessfn) {
+        if (typeof fn != 'function') {
+            fn = function(url) {
+                console.log("===createObjectURL===", url);
+            }
+        }
+        var xhr = new XMLHttpRequest();
+        console.log(xhr);
+        xhr.open("GET", url, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+            var ourl = window.URL.createObjectURL(xhr.response);
+            fn(ourl);
+
+        }
+        xhr.onprogress = function(event) {
+            console.log("===onprogress===", event);
+            if (event.lengthComputable) {
+                progressfn(event.loaded, event.total);
+            }
+        }
+        xhr.onreadystatechange = function() {}
+        xhr.onloadstart = function(e) {
+            console.log("===loadstart===");
+        }
+        xhr.onabort = function(e) {
+            console.log("===传输取消===");
+        }
+        xhr.onerror = function(e) {
+            console.log("===error===");
+        }
+        xhr.onloadend = function() {
+            console.log("===loadend===");
+        }
+        xhr.ontimeout = function() {
+            console.log("===请求超时===");
+        }
+        xhr.send();
+    }
+    loadImage('http://www.muyake.site/mario/dist/static/img/background2.82ff78e19a99ff14fa5b48e90f72030c.png', loadFinish, progressfn);
+</script>
+
+</html>
