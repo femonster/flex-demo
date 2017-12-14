@@ -5,6 +5,7 @@ var oOtherImgsBoxs = document.querySelector(".other-img-com");
 var oBody = document.body;
 var oSliderBox = document.querySelector(".slider-box");
 var oBack = document.querySelector(".i-back");
+var navBox = document.querySelector(".img-nav-box");
 
 var slider = {
     mySliderNum: function() {
@@ -26,57 +27,67 @@ var slider = {
     newImgWaH: function(cw, ch, imgw, imgh) {
         var rate1 = 0;
         var rate2 = 0;
-        if (imgw == 30 && imgh == 30) {
-            return { width: imgw, height: imgh }
+        if (ch > 0) {
+            rate1 = cw / ch;
+        }
+        if (imgh > 0) {
+            rate2 = imgw / imgh
+        }
+        if (rate1 > rate2) {
+            return { width: ch * rate2, height: ch }
         } else {
-            if (ch > 0) {
-                rate1 = cw / ch;
-            }
-            if (imgh > 0) {
-                rate2 = imgw / imgh
-            }
-            if (rate1 > rate2) {
-                return { width: ch * rate2, height: ch }
-            } else {
-                return { width: cw, height: cw / rate2 }
-            }
+            return { width: cw, height: cw / rate2 }
         }
     },
-    isloaded: false,
-    isrenderW: false,
-    isrender: false,
     scroll: null,
     imgArr: [], //{w:1,h:1,url:1}
     render: function(p, sArr) {
-
         var self = this;
         var str = "";
+        var navStr = "";
         var count = 0;
         var boxW = document.documentElement.clientWidth || document.body.clientWidth;
         var boxH = document.querySelector(".show-img").clientHeight;
+        var navW = ((boxW - 10) / p) > navBox.clientHeight ? navBox.clientHeight - 10 : ((boxW - 10) / p);
         for (var i = 0; i < p; i++) {
-            str += '<li class="s-item" data-url=' + sArr[i].url + '><img class="loading" src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif" width="50" height="50"/></li>';
+            var isloaded = sArr[i].isload;
+            console.log(isloaded);
+            if (isloaded == 1) {
+                var tempw = sArr[i].width,
+                    temph = sArr[i].height;
+                var newWaH = self.newImgWaH(boxW, boxH, tempw, temph);
+                str += '<li class="s-item" data-url=' + sArr[i].url + '><img src="' + sArr[i].url + '" style="width:' + newWaH.width + 'px;height:' + newWaH.height + 'px"/></li>';
+            } else {
+                str += '<li class="s-item" data-url=' + sArr[i].url + ' data-isload="0"><img class="loading" src="http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif" width="30" height="30"/></li>';
+            }
+            navStr += '<div class="img-nav" style="width:' + navW + 'px;height:' + navW + 'px;background-image:url(' + sArr[i].url + ')" data-index=' + i + '></div>';
         }
         oSliderBox.innerHTML = str;
+        navBox.innerHTML = navStr;
         var aSliderLi = document.querySelectorAll(".s-item");
         this.setSliderWidth(aSliderLi);
-
         var aLi = Array.prototype.slice.call(aSliderLi);
         aLi.forEach(function(item, index) {
-            var oimg = new Image();
-            oimg.onload = function() {
-                var w = oimg.width;
-                var h = oimg.height;
-                var nWaH = self.newImgWaH(w,h,boxW,boxH);
-                oimg.style.width = nWaH.width + "px";
-                oimg.style.height = nWaH.height + "px";
-                aSliderLi[index].innerHTML = "";
-                aSliderLi[index].appendChild(oimg);
+            console.log(item.dataset.isload);
+            if (item.dataset.isload == 0) {
+                var url = item.dataset.url;
+                var oimg = new Image();
+                oimg.style.opacity = 0;
+                oimg.onload = function() {
+                    var w = oimg.width;
+                    var h = oimg.height;
+                    item.querySelector(".loading").style.display = "none";
+                    var newWaH = self.newImgWaH(boxW, boxH, w, h);
+                    oimg.style.width = newWaH.width + "px";
+                    oimg.style.height = newWaH.height + "px";
+                    item.appendChild(oimg);
+                    oimg.style.opacity = 1;
+                }
+                oimg.src = url;
             }
-            oimg.src = item.dataset.url;
         });
     },
-    setSliderWidth(aSliderItem) {
+    setSliderWidth: function(aSliderItem) {
         var oSliderBox = document.querySelector(".slider-box");
         var width = 0;
         var i;
@@ -95,10 +106,12 @@ var slider = {
         oImgNums.innerText = i + "/" + len;
         var achild = _this.children;
         for (var j = 0; j < achild.length; j++) {
-            var temp = achild[j];
+            var temp = achild[j].children[0];
             this.imgArr.push({
-                "url": temp.dataset.bg,
-                "loading": "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif"
+                "url": temp.dataset.echoBackground,
+                "isload": temp.dataset.isload,
+                "width": temp.dataset.w,
+                "height": temp.dataset.h
             })
         }
         this._initSlider(i, len, this.imgArr);
@@ -123,16 +136,28 @@ var slider = {
                 loop: false,
                 threshold: 0.3,
                 speed: 400
-            }
+            },
+            click: true
         });
         self.scroll.goToPage(Number(i) - 1, 0, 0);
+        var nb = Array.prototype.slice.call(navBox.children);
+        nb.forEach(function(item) {
+            if (item.dataset.index == Number(i) - 1) {
+                addClass(item, "active");
+            }
+        })
         self.scroll.on("scrollEnd", function() {
             var pageIndex = Number(self.scroll.getCurrentPage().pageX) + 1;
             oImgNums.innerText = pageIndex + "/" + len;
+            nb.forEach(function(item) {
+                item.className = "img-nav";
+                if (item.dataset.index == Number(pageIndex) - 1) {
+                    addClass(item, "active");
+                }
+            })
         })
     }
 }
-
 
 window.addEventListener("DOMContentLoaded", function() {
     document.addEventListener("click", function(e) {
@@ -167,12 +192,25 @@ window.addEventListener("DOMContentLoaded", function() {
         }
     })
 
-    oBack.addEventListener("click", function(e) {
-        slider.hideMask();
+    navBox.addEventListener("click", function(e) {
+        var _this = e.target;
+        if (hasClass(_this, "img-nav")) {
+            var page = Number(_this.dataset.index);
+            e.stopPropagation();
+            var nb = Array.prototype.slice.call(navBox.children);
+            nb.forEach(function(item) {
+                item.className = "img-nav";
+            })
+            addClass(_this, "active");
+            if (!!slider.scroll) {
+                slider.scroll.goToPage(page, 0, 300);
+            }
+            oImgNums.innerText = (page + 1) + "/" + nb.length;
+        }
     })
-
+    oMaskBox.addEventListener("click", function(e) {
+        if (e.target.nodeName != 'IMG' && !hasClass(e.target, "img-nav")) {
+            slider.hideMask();
+        }
+    })
 })
-
-
-
-// }
