@@ -13,29 +13,29 @@ var tempImgs = [
 ]
 
 var otherTmps = [
-    'http://upload-images.jianshu.io/upload_images/58338-535902052160c8f3.JPG?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/7740871-c2c80bad1edb2dfd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/8335295-ad8a0e30d6d53277.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/3459828-d680839c1315cfbb.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/58338-c2bcd87742406b13.JPG?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/9531009-8bb163d6d1ca0ffe.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/3888445-e94b9c270d90e0b3.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/3888445-b19e5de2f6e8ad3b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/3888445-cb101354c9f627bf.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/3888445-1de0c2b804291de4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700'
+        'http://upload-images.jianshu.io/upload_images/58338-535902052160c8f3.JPG?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/7740871-c2c80bad1edb2dfd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/8335295-ad8a0e30d6d53277.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/3459828-d680839c1315cfbb.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/58338-c2bcd87742406b13.JPG?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/9531009-8bb163d6d1ca0ffe.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/3888445-e94b9c270d90e0b3.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/3888445-b19e5de2f6e8ad3b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/3888445-cb101354c9f627bf.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
+        'http://upload-images.jianshu.io/upload_images/3888445-1de0c2b804291de4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700'
 
-]
-// var tempImgs = [
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/1.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/2.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/3.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/4.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/5.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/6.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/7.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/8.jpg',
-//     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/9.jpg',
-// ]
+    ]
+    // var tempImgs = [
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/1.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/2.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/3.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/4.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/5.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/6.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/7.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/8.jpg',
+    //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/9.jpg',
+    // ]
 
 // var otherTmps = [
 //     'http://a.xnimg.cn/wap/mobile/2017activity/real-estate/branch/loading/branch/real-estate-has-nav/img/home/10.jpg',

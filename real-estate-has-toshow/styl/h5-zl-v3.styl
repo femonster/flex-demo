@@ -94,8 +94,8 @@ body
                 height: ptr(154)
         .three-img
             .item-box,.img-item 
-                width: ptr(101)
-                height: ptr(101)  
+                width: ptr(100)
+                height: ptr(100)  
         .text-comment
             background-color: #eeeff5
         .img-comment
@@ -380,9 +380,11 @@ body
         .slider-box
             min-height: 100%
             position: relative
+            // border:1px solid #ffffff
             
             .s-item
                 height: 100%
+                width: 100%
                 position: absolute
                 top: 0
                 left: 0
@@ -398,27 +400,39 @@ body
                 z-index: 1060
             .s-other 
                 opacity: 0           
-                    
-    .img-nav-box
-        width: 100%
+    .nav-wrap 
+        width: 90%
         height: ptr(65)
         font-size: 0
-        text-align: center
+        left: 5%
         position: absolute
         bottom: ptr(60)
-        display flex
-        justify-content: center
-        align-items: center
-        div
-            display: inline-block
-            box-sizing: border-box
-            border: ptr(3) solid #000000
-            background-color: rgb(215,215,215)
-            background-size: cover
-            background-position: center
-            background-repeat: no-repeat 
-        .active
-            border: ptr(3) solid #ffffff
+        overflow-y:hidden
+        overflow-x: auto
+        .img-nav-box
+            // width: 90%
+            height: 100%
+            margin: 0 auto
+            // height: ptr(65)
+            // font-size: 0
+            // text-align: center
+            // position: absolute
+            // bottom: ptr(60)
+            display flex
+            justify-content: center
+            align-items: center
+            div
+                // width: ptr(66)
+                // height: ptr(66)
+                display: inline-block
+                box-sizing: border-box
+                border: ptr(3) solid #000000
+                background-color: rgb(215,215,215)
+                background-size: cover
+                background-position: center
+                background-repeat: no-repeat 
+            .active
+                border: ptr(3) solid #ffffff
             
     .footer
         border: none

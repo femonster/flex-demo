@@ -16,7 +16,6 @@ var sMyImgs = [
 var sOtherImgs = [
     'http://upload-images.jianshu.io/upload_images/58338-535902052160c8f3.JPG?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
     'http://upload-images.jianshu.io/upload_images/7740871-c2c80bad1edb2dfd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
-    'http://upload-images.jianshu.io/upload_images/a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
     'http://upload-images.jianshu.io/upload_images/3459828-d680839c1315cfbb.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
     'http://upload-images.jianshu.io/upload_images/58338-c2bcd87742406b13.JPG?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
     'http://upload-images.jianshu.io/upload_images/9531009-8bb163d6d1ca0ffe.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700',
@@ -26,6 +25,60 @@ var sOtherImgs = [
     'http://upload-images.jianshu.io/upload_images/3888445-1de0c2b804291de4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/700'
 
 ]
+var arr = [];
+var arr2 = [];
+var count = 0;
+sOtherImgs.forEach(function(item, index) {
+    arr.push({
+        width: 0,
+        height: 0,
+        url: item,
+        isLoad: 0,
+        isShow: 0,
+        index: index
+    });
+})
+
+sOtherImgs.forEach(function(item, index) {
+    // loadImg({
+    //         url: item,
+    //         onComplete: function(img) {
+    //             document.querySelectorAll("#oul li")[index].appendChild(img);
+    //             check(img)
+    //         }
+    //     })
+    var img = new Image();
+    img.onload = function() {
+        check(this);
+        loading(this);
+    }
+    img.src = item;
+    document.querySelectorAll("#oul li")[index].appendChild(img);
+});
+
+function check(img) {
+    arr.forEach(function(item) {
+        if (item.url == img.src && item.isShow == 0) {
+            item.width = img.width;
+            item.height = img.height;
+            item.isLoad = 1;
+            item.isShow = 1;
+        }
+    })
+    while (count < arr.length) {
+        if (arr[count].isShow == 1) {
+            console.log(count);
+            document.querySelectorAll("#oul img")[count].style.opacity = 1;
+            count++
+        } else {
+            break;
+        }
+    }
+}
+
+
+
+
 
 // img onload
 function loadImg(op) {
@@ -48,71 +101,47 @@ function loadImg(op) {
     img.src = op.url;
 }
 
-// function loadList(sArr, op) {
-//     sArr.forEach(function(item, index) {
-//         loadImg({
-//             url: sArr[index],
-//             onComplete: function(img) {
-//                 if (op.start == index) {
-//                     op.start++;
-//                     op.succfn && op.succfn(img);
-//                 } else {
-//                     loadList(sArr, op);
-//                 }
-//             },
-//             onerror: function(img) {
-//                 op.start++;
-//                 op.fail && op.fail(img);
-//             },
-//             onTimeout: function(img) {
-//                 op.start++;
-//                 op.timout && op.timeout(img);
-//             }
-//         })
-//     })
-// }
-
-// img queue
 function loadList(sArr, op) {
-    loadImg({
-        timeout: op.timeout || 5000,
-        url: sArr[op.start],
-        onComplete: function(img) {
-            if (++op.start < sArr.length) {
-                loadList(sArr, op);
-            }
-            op.succfn && op.succfn(img);
-        },
-        onTimeout: function() {
-            if (++op.start < sArr.length) {
-                loadList(sArr, op);
-            }
-            op.timeout && op.timeout(img);
-        },
-        onerror: function(img) {
-            if (++op.start < sArr.length) {
-                console.log("error");
-                loadList(sArr, op);
-            }
-            op.failfn && op.failfn(img);
-        }
-    })
+    if (op.start < sArr.length) {
+        console.log(op.start);
+        sArr.forEach(function(item, index) {
+            loadImg({
+                url: sArr[index],
+                onComplete: function(img) {
+                    if (op.start == index) {
+                        op.start++;
+                        op.succfn && op.succfn(img);
+                    } else {
+                        loadList(sArr, op);
+                    }
+                },
+                onerror: function(img) {
+                    op.start++;
+                    op.fail && op.fail(img);
+                },
+                onTimeout: function(img) {
+                    op.start++;
+                    op.timout && op.timeout(img);
+                }
+            })
+        })
+    }
 }
 
-(function() {
-    loadList(sMyImgs, {
-        start: 0,
-        succfn: function(img) {
-            img.width = img.height = 100;
-            document.body.appendChild(img);
-        }
-    })
+// (function() {
+//     // loadList(sMyImgs, {
+//     //     start: 0,
+//     //     succfn: function(img) {
+//     //         img.width = img.height = 100;
+//     //         document.body.appendChild(img);
+//     //     }
+//     // })
 
-    loadList(sOtherImgs, {
-        start: 0,
-        succfn: function(img) {
-            img.width = img.height = 100;
-            document.body.appendChild(img);
-        }
-    })
-})()
+//     loadList(sOtherImgs, {
+//         start: 0,
+//         succfn: function(img) {
+//             img.width = img.height = 100;
+//             document.body.appendChild(img);
+//         }
+//     })
+// })()
