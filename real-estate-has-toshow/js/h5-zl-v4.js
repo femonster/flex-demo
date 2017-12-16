@@ -4,8 +4,9 @@ var oImgsBox = document.querySelector(".my-img-com");
 var oOtherImgsBoxs = document.querySelector(".other-img-com");
 var oSliderBox = document.querySelector(".slider-box");
 var oBack = document.querySelector(".i-back");
+var navWrap = document.querySelector(".nav-wrap");
 var navBox = document.querySelector(".img-nav-box");
-var navTransBox = null;
+// var navTransBox = null;
 
 var boxW = document.documentElement.clientWidth - 30 || document.body.clientWidth - 30;
 var boxH = document.querySelector(".show-img").clientHeight;
@@ -114,6 +115,53 @@ var imgShow = {
     }
 }
 
+var drag = {
+    currentPosition: 0,
+    transform: function(translate) {
+        this.style.webkitTransform = "translate3d(" + translate + "px,0,0)";
+        drag.currentPosition = translate;
+    },
+    init: function(el) {
+        if (typeof el.dataset.isbind == "undefined") {
+            drag.bindDragEvent(el);
+            el.dataset.isbind == 1;
+        }
+    },
+    bindDragEvent: function(el) {
+        var self = this;
+        var startX, startY;
+        var initialPos = 0; //手指按下的屏幕距离
+        var moveLen = 0; //手指当前滑动的距离
+        el.addEventListener("touchstart", function(e) {
+            var touch = e.touches[0];
+            startX = touch.pageX;
+            startY = touch.pageY;
+            initialPos = self.currentPosition;
+        })
+        el.addEventListener("touchmove", function(e) {
+            var touch = e.touches[0];
+            var deltaX = touch.pageX - startX;
+            var deltaY = touch.pageY - startY;
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                moveLen = deltaX;
+                var translate = initialPos + deltaX;
+                if (translate >= 0) {
+                    translate = 0;
+                } else if (translate <= el.parentNode.offsetWidth - el.offsetWidth) {
+                    translate = el.parentNode.offsetWidth - el.offsetWidth;
+                }
+                self.transform.call(el, translate);
+            }
+        })
+        el.addEventListener("touchend", function(e) {
+            // var touch = e.changedTouches[0];
+            // moveLen = touch.pageX;
+        })
+    }
+
+}
+
+
 // --------------------slider--------------------
 var slider = {
     imgArr: [],
@@ -154,16 +202,16 @@ var slider = {
         }
     },
     // 绑定touch事件
-    init: function(el, tempImgs, index) {
+    init: function(el) {
         if (el.dataset.isbind == 0) {
-            slider.bindTouchEvent(el, index);
+            slider.bindTouchEvent(el);
             el.dataset.isbind = 1;
         }
     },
     transform: function(translate) {
         this.style.webkitTransform = "translate3d(" + translate + "px,0,0)";
     },
-    bindTouchEvent: function(el, clickIndex) {
+    bindTouchEvent: function(el) {
         var self = this;
         var startX, startY;
         var initialPos = 0; //手指按下的屏幕距离
@@ -185,7 +233,6 @@ var slider = {
         el.addEventListener("touchstart", function(e) {
             who = oMaskBox.dataset.who;
             tempImgs = who == "me" ? myImgArr : otherImgArr;
-            // tempImgs = self.imgArr;
             maxLen = tempImgs.length - 1;
             currentItem = el.querySelector(".s-current");
             tmpBox = el.querySelector(".s-tmp-box");
@@ -280,6 +327,30 @@ var slider = {
             var tmpTrans = 0;
             //计算手指在屏幕上停留时间
             var deltaT = new Date().getTime() - startT;
+
+            function canMove() {
+                if (direction == "left") {
+                    translate = -pageWidth;
+                    if (tmpImgIndex > maxLen) {
+                        translate = 0;
+                        tmpImgIndex = maxLen;
+                    }
+                } else {
+                    translate = pageWidth;
+                    if (tmpImgIndex < 0) {
+                        translate = 0;
+                        tmpImgIndex = 0;
+                    }
+                }
+                tmpBox.dataset.isCurr = 1;
+                tmpBox.dataset.sIndex = tmpImgIndex;
+                tmpBox.dataset.dirc = "";
+                // 当副手确定要上位，并且没有到边界的时候，替换class
+                if (tmpBox.dataset.isCurr == 1 && tmpBox.dataset.isborder == 0) {
+                    replaceClass(tmpBox, "s-current", "s-tmp-box");
+                    replaceClass(currentItem, "s-tmp-box", "s-current");
+                }
+            }
             //发生了滑动，并且滑动事件未结束
             if (isMove && !isTouchEnd) {
                 isTouchEnd = true;
@@ -287,52 +358,14 @@ var slider = {
                 tmpBox.style.webkitTransition = "0.3s ease -webkit-transform";
                 // 如果手指停留时间小于300ms,则滑动到下一页
                 if (deltaT < 300) {
-                    if (direction == "left") {
-                        translate = -pageWidth;
-                        if (tmpImgIndex > maxLen) {
-                            translate = 0;
-                            tmpImgIndex = maxLen;
-                        }
-                    } else {
-                        translate = pageWidth;
-                        if (tmpImgIndex < 0) {
-                            translate = 0;
-                            tmpImgIndex = 0;
-                        }
-                    }
-                    tmpBox.dataset.isCurr = 1;
-                    tmpBox.dataset.sIndex = tmpImgIndex;
-                    tmpBox.dataset.dirc = "";
-                    // 当副手确定要上位，并且没有到边界的时候，替换class
-                    if (tmpBox.dataset.isCurr == 1 && tmpBox.dataset.isborder == 0) {
-                        replaceClass(tmpBox, "s-current", "s-tmp-box");
-                        replaceClass(currentItem, "s-tmp-box", "s-current");
-                    }
+                    canMove();
+
                 } else {
                     if (Math.abs(moveLen) / pageWidth < 0.5) {
                         translate = 0;
                         tmpTrans = direction == "left" ? pageWidth : -pageWidth;
                     } else {
-                        if (direction == "left") {
-                            translate = -pageWidth;
-                            if (tmpImgIndex > maxLen) {
-                                translate = 0;
-                                tmpImgIndex = maxLen;
-                            }
-                        } else {
-                            translate = pageWidth;
-                            if (tmpImgIndex < 0) {
-                                translate = 0;
-                                tmpImgIndex = 0;
-                            }
-                        }
-                        tmpBox.dataset.isCurr = 1;
-                        tmpBox.dataset.sIndex = tmpImgIndex;
-                        tmpBox.dataset.dirc = "";
-                        if (tmpBox.dataset.isCurr == 1 && tmpBox.dataset.isborder == 0) {
-                            replaceClass(tmpBox, "s-current", "s-tmp-box");
-                            replaceClass(currentItem, "s-tmp-box", "s-current");
-                        }
+                        canMove();
                     }
                 }
                 self.transform.call(currentItem, translate);
@@ -341,19 +374,18 @@ var slider = {
                 if (tmpBox.dataset.isCurr == 1) {
                     var nb = Array.prototype.slice.call(navBox.children);
                     nb.forEach(function(item, index) {
-                        item.className = "img-nav";
-                        addClass(nb[tmpImgIndex], "active");
-                    })
-
-                    var navWrap = document.querySelector(".nav-wrap");
+                            item.className = "img-nav";
+                            addClass(nb[tmpImgIndex], "active");
+                        })
+                        // var navWrap = document.querySelector(".nav-wrap");
                     if (maxLen > 5 && tmpImgIndex <= 3) {
                         // navWrap.scrollLeft = 0;
-                        navWrap.children[0].style.webkitTransform = "translateX(0px)";
+                        navBox.style.webkitTransform = "translateX(0)";
 
                     }
                     if (maxLen > 5 && tmpImgIndex >= 5) {
                         // navWrap.scrollLeft = navWrap.children[0].offsetWidth - navWrap.offsetWidth;
-                        navWrap.children[0].style.webkitTransform = "translateX(" + (-navWrap.children[0].offsetWidth + navWrap.offsetWidth) + "px)";
+                        navBox.style.webkitTransform = "translateX(" + (-navBox.offsetWidth + navWrap.offsetWidth) + "px)";
 
                     }
                     oImgNums.innerText = (tmpImgIndex + 1) + "/" + nb.length;
@@ -386,38 +418,56 @@ var slider = {
                 tmpBox.dataset.sIndex = toIndex;
 
                 if (maxLen > 5 && toIndex <= 3) {
-                    // _this.parentNode.scrollLeft = 0;
+                    // if (navWrap.scrollLeft != 0) {
+                    // navWrap.scrollLeft = 0;
+                    // }
                     _this.style.webkitTransform = "translateX(0px)";
-
                 }
                 if (maxLen > 5 && toIndex >= 5) {
-                    // _this.parentNode.scrollLeft = _this.offsetWidth - document.querySelector(".nav-wrap").offsetWidth;
-                    _this.style.webkitTransform = "translateX(" + (-_this.offsetWidth + document.querySelector(".nav-wrap").offsetWidth) + "px)";
+                    // if (navWrap.scrollLeft != _this.offsetWidth - navWrap.offsetWidth) {
+                    //     navWrap.scrollLeft = _this.offsetWidth - navWrap.offsetWidth;
+                    // }
+                    _this.style.webkitTransform = "translateX(" + (-_this.offsetWidth + navWrap.offsetWidth) + "px)";
+                }
+
+                function toWhere(dirc, pageWidth) {
+                    var nWaH = self.newImgWaH(boxW, boxH, tempImgs[toIndex].width, tempImgs[toIndex].height);
+                    translate = dirc == "right" ? pageWidth : -pageWidth;
+                    dirc == "right" ? self.transform.call(tmpBox, -pageWidth) : self.transform.call(tmpBox, pageWidth);
+                    var tmpBoxImg = tmpBox.children[0];
+                    tmpBoxImg.src = tempImgs[toIndex].url;
+                    tmpBoxImg.style.width = nWaH.width + "px";
+                    tmpBoxImg.style.height = nWaH.height + "px";
+                    tmpBox.dataset.isborder = 0;
+                    tmpBox.style.opacity = 1;
+                    tmpBox.dataset.isCurr = 1;
                 }
 
                 if (toIndex == nowIndex) {
                     return;
                 } else if (toIndex < nowIndex) { //right
-                    var nWaH = self.newImgWaH(boxW, boxH, tempImgs[toIndex].width, tempImgs[toIndex].height);
-                    translate = pageWidth;
-                    self.transform.call(tmpBox, -pageWidth);
-                    tmpBox.children[0].src = tempImgs[toIndex].url;
-                    tmpBox.children[0].style.width = nWaH.width + "px";
-                    tmpBox.children[0].style.height = nWaH.height + "px";
-                    tmpBox.dataset.isborder = 0;
-                    tmpBox.style.opacity = 1;
-                    tmpBox.dataset.isCurr = 1;
+                    toWhere("right", pageWidth);
+                    // var nWaH = self.newImgWaH(boxW, boxH, tempImgs[toIndex].width, tempImgs[toIndex].height);
+                    // translate = pageWidth;
+                    // self.transform.call(tmpBox, -pageWidth);
+                    // tmpBox.children[0].src = tempImgs[toIndex].url;
+                    // tmpBox.children[0].style.width = nWaH.width + "px";
+                    // tmpBox.children[0].style.height = nWaH.height + "px";
+                    // tmpBox.dataset.isborder = 0;
+                    // tmpBox.style.opacity = 1;
+                    // tmpBox.dataset.isCurr = 1;
 
                 } else { //left
-                    var nWaH = self.newImgWaH(boxW, boxH, tempImgs[toIndex].width, tempImgs[toIndex].height);
-                    translate = -pageWidth;
-                    self.transform.call(tmpBox, pageWidth);
-                    tmpBox.children[0].src = tempImgs[toIndex].url;
-                    tmpBox.children[0].style.width = nWaH.width + "px";
-                    tmpBox.children[0].style.height = nWaH.height + "px";
-                    tmpBox.dataset.isborder = 0;
-                    tmpBox.style.opacity = 1;
-                    tmpBox.dataset.isCurr = 1;
+                    toWhere("left", pageWidth);
+                    // var nWaH = self.newImgWaH(boxW, boxH, tempImgs[toIndex].width, tempImgs[toIndex].height);
+                    // translate = -pageWidth;
+                    // self.transform.call(tmpBox, pageWidth);
+                    // tmpBox.children[0].src = tempImgs[toIndex].url;
+                    // tmpBox.children[0].style.width = nWaH.width + "px";
+                    // tmpBox.children[0].style.height = nWaH.height + "px";
+                    // tmpBox.dataset.isborder = 0;
+                    // tmpBox.style.opacity = 1;
+                    // tmpBox.dataset.isCurr = 1;
 
                 }
 
@@ -439,6 +489,7 @@ var slider = {
         var self = this;
         var navStr = "";
         var sArr = who == "me" ? myImgArr : otherImgArr;
+        // var navWrap = document.querySelector(".nav-wrap");
         boxH = document.querySelector(".show-img").clientHeight;
         // var navW = ((boxW - 10) / len) > navBox.clientHeight ? navBox.clientHeight - 10 : ((boxW - 10) / len);
         var navW = navBox.clientHeight - 10;
@@ -450,17 +501,18 @@ var slider = {
         navBox.style.width = navW * len + "px";
         var navArr = Array.prototype.slice.call(navBox.children);
         navArr.forEach(function(item) {
-            item.className = "img-nav";
-            navArr[index].className = "img-nav active";
-        })
-        var navWrap = document.querySelector(".nav-wrap");
+                item.className = "img-nav";
+                navArr[index].className = "img-nav active";
+            })
+            // navBox = navWrap.children[0];
         if (len > 5 && index <= 3) {
-            navWrap.children[0].style.webkitTransform = "translateX(0)";
             // navWrap.scrollLeft = 0;
+            navBox.style.webkitTransform = "translateX(0px)";
+
         }
         if (len > 5 && index >= 5) {
             // navWrap.scrollLeft = navWrap.children[0].offsetWidth - navWrap.offsetWidth;
-            navWrap.children[0].style.webkitTransform = "translateX(" + (-navWrap.children[0].offsetWidth + navWrap.offsetWidth) + "px)";
+            navBox.style.webkitTransform = "translateX(" + (-navBox.offsetWidth + navWrap.offsetWidth) + "px)";
             // navWrap.scrollLeft = navWrap.children[0].offsetWidth - navWrap.offsetWidth;
         }
         var oCurr = document.querySelector(".s-current");
@@ -483,6 +535,8 @@ var slider = {
         document.body.className = "lock";
         oImgNums.innerText = (Number(i) + 1) + "/" + len;
         this._render(i, len, who);
+        drag.init(document.querySelector(".img-nav-box"));
+
     },
     // 隐藏mask
     hideMask: function() {
@@ -542,7 +596,7 @@ window.addEventListener("DOMContentLoaded", function() {
     })
 
     oMaskBox.addEventListener("click", function(e) {
-        if (e.target.nodeName != 'IMG' && !hasClass(e.target, "img-nav")) {
+        if (e.target.nodeName != 'IMG' && !hasClass(e.target, "img-nav") && !hasClass(e.target, "download")) {
             slider.hideMask();
         }
     })
