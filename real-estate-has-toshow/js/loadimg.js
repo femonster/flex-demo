@@ -145,3 +145,67 @@ function loadList(sArr, op) {
 //         }
 //     })
 // })()
+
+
+//```````````````````beifen
+
+// function sortToShow(imgArr, count, box) {
+//     imgArr.forEach(function(item, index) {
+//         var img = new Image();
+//         img.onload = function() {
+//             var maskShow = oMaskBox.dataset.show;
+//             item.url = img.src;
+//             item.width = img.width;
+//             item.height = img.height;
+//             if (maskShow == "1") {
+//                 loading();
+//             }
+//             box.querySelectorAll(".img-item")[index].style.backgroundImage = "url(" + img.src + ")";
+//             queue(imgArr, count, box, this);
+//         }
+//         img.src = item.originUrl;
+//     })
+// }
+
+// function loading() {
+//     var who = oMaskBox.dataset.who;
+//     var current = oMaskBox.querySelector(".s-current");
+//     var nowImgIndex = current.dataset.sIndex;
+//     var currImg = current.children[0];
+
+//     if (who == "me") {
+//         loadImg(myImgArr, nowImgIndex, currImg)
+//     } else {
+//         loadImg(otherImgArr, nowImgIndex, currImg)
+//     }
+// }
+
+// function loadImg(arr, nowImgIndex, currImg) {
+//     if (arr[nowImgIndex].isload == 1 && typeof currImg.dataset.loadingShow == "undefined") {
+//         var nWaH = slider.newImgWaH(boxW, boxH, arr[nowImgIndex].width, arr[nowImgIndex].height);
+//         currImg.style.width = nWaH.width + "px";
+//         currImg.style.height = nWaH.height + "px";
+//         currImg.src = arr[nowImgIndex].url;
+//         currImg.dataset.loadingShow = 1;
+//     }
+// }
+
+// function queue(imgArr, count, box, img) {
+//     imgArr.forEach(function(item) {
+//         if (item.originUrl == img.src && item.canshow == 0) {
+//             item.width = img.width;
+//             item.height = img.height;
+//             item.isload = 1;
+//             item.canshow = 1;
+//         }
+//     })
+
+//     while (count < imgArr.length) {
+//         if (imgArr[count].canshow == 1) {
+//             box.querySelectorAll(".img-item")[count].style.opacity = 1;
+//             count++;
+//         } else {
+//             break;
+//         }
+//     }
+// }

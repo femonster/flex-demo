@@ -5,12 +5,11 @@ var oOtherImgsBoxs = document.querySelector(".other-img-com");
 var oSliderBox = document.querySelector(".slider-box");
 var oBack = document.querySelector(".i-back");
 var navBox = document.querySelector(".img-nav-box");
+var navTransBox = null;
 
 var boxW = document.documentElement.clientWidth - 30 || document.body.clientWidth - 30;
 var boxH = document.querySelector(".show-img").clientHeight;
 
-var countme = 0;
-var countother = 0;
 var myImgArr = [];
 var otherImgArr = [];
 var myTmpsNum = mySliderNum();
@@ -47,73 +46,75 @@ var promise = new Promise(function(resolve, reject) {
 })
 
 promise.then(function() {
-    sortToShow(myImgArr, countme, oImgsBox);
-    sortToShow(otherImgArr, countother, oOtherImgsBoxs);
+    imgShow.sortToShow(myImgArr, imgShow.countme, oImgsBox);
+    imgShow.sortToShow(otherImgArr, imgShow.countother, oOtherImgsBoxs);
 })
 
-// 队列显示 && loading替换
-function sortToShow(imgArr, count, box) {
-    imgArr.forEach(function(item, index) {
-        var img = new Image();
-        img.onload = function() {
-            var maskShow = oMaskBox.dataset.show;
-            item.url = img.src;
-            item.width = img.width;
-            item.height = img.height;
-            if (maskShow == "1") {
-                loading();
+// -------------队列显示 && loading替换----------------
+var imgShow = {
+    countme: 0,
+    countother: 0,
+    sortToShow: function(imgArr, count, box) {
+        var self = this;
+        imgArr.forEach(function(item, index) {
+            var img = new Image();
+            img.onload = function() {
+                var maskShow = oMaskBox.dataset.show;
+                item.url = img.src;
+                item.width = img.width;
+                item.height = img.height;
+                if (maskShow == "1") {
+                    self.loading();
+                }
+                box.querySelectorAll(".img-item")[index].style.backgroundImage = "url(" + img.src + ")";
+                self.queue(imgArr, count, box, this);
             }
-            box.querySelectorAll(".img-item")[index].style.backgroundImage = "url(" + img.src + ")";
-            queue(imgArr, count, box, this);
-        }
-        img.src = item.originUrl;
-    })
-}
+            img.src = item.originUrl;
+        })
+    },
+    loading: function() {
+        var self = this;
+        var who = oMaskBox.dataset.who;
+        var current = oMaskBox.querySelector(".s-current");
+        var nowImgIndex = current.dataset.sIndex;
+        var currImg = current.children[0];
 
-function loading() {
-    var who = oMaskBox.dataset.who;
-    var current = oMaskBox.querySelector(".s-current");
-    var nowImgIndex = current.dataset.sIndex;
-    var currImg = current.children[0];
-
-    if (who == "me") {
-        loadImg(myImgArr, nowImgIndex, currImg)
-    } else {
-        loadImg(otherImgArr, nowImgIndex, currImg)
-    }
-}
-
-function loadImg(arr, nowImgIndex, currImg) {
-    if (arr[nowImgIndex].isload == 1 && typeof currImg.dataset.loadingShow == "undefined") {
-        var nWaH = slider.newImgWaH(boxW, boxH, arr[nowImgIndex].width, arr[nowImgIndex].height);
-        currImg.style.width = nWaH.width + "px";
-        currImg.style.height = nWaH.height + "px";
-        currImg.src = arr[nowImgIndex].url;
-        currImg.dataset.loadingShow = 1;
-    }
-}
-
-function queue(imgArr, count, box, img) {
-    imgArr.forEach(function(item) {
-        if (item.originUrl == img.src && item.canshow == 0) {
-            item.width = img.width;
-            item.height = img.height;
-            item.isload = 1;
-            item.canshow = 1;
-        }
-    })
-
-    while (count < imgArr.length) {
-        if (imgArr[count].canshow == 1) {
-            box.querySelectorAll(".img-item")[count].style.opacity = 1;
-            count++;
+        if (who == "me") {
+            self.loadImg(myImgArr, nowImgIndex, currImg)
         } else {
-            break;
+            self.loadImg(otherImgArr, nowImgIndex, currImg)
+        }
+    },
+    loadImg: function(arr, nowImgIndex, currImg) {
+        if (arr[nowImgIndex].isload == 1 && typeof currImg.dataset.loadingShow == "undefined") {
+            var nWaH = slider.newImgWaH(boxW, boxH, arr[nowImgIndex].width, arr[nowImgIndex].height);
+            currImg.style.width = nWaH.width + "px";
+            currImg.style.height = nWaH.height + "px";
+            currImg.src = arr[nowImgIndex].url;
+            currImg.dataset.loadingShow = 1;
+        }
+    },
+    queue: function(imgArr, count, box, img) {
+        imgArr.forEach(function(item) {
+            if (item.originUrl == img.src && item.canshow == 0) {
+                item.width = img.width;
+                item.height = img.height;
+                item.isload = 1;
+                item.canshow = 1;
+            }
+        })
+        while (count < imgArr.length) {
+            if (imgArr[count].canshow == 1) {
+                box.querySelectorAll(".img-item")[count].style.opacity = 1;
+                count++;
+            } else {
+                break;
+            }
         }
     }
 }
 
-// --------------------slider-----------------
+// --------------------slider--------------------
 var slider = {
     imgArr: [],
     boxWidth: window.innerWidth,
@@ -137,7 +138,7 @@ var slider = {
         var rate1 = 0;
         var rate2 = 0;
         if (imgw == 30 && imgh == 30) {
-            return { width: imgw, height: imgh }
+            return { width: 30, height: 30 }
         } else {
             if (ch > 0) {
                 rate1 = cw / ch;
@@ -152,13 +153,12 @@ var slider = {
             }
         }
     },
+    // 绑定touch事件
     init: function(el, tempImgs, index) {
-        // document.addEventListener("DOMContentLoaded", function() {
         if (el.dataset.isbind == 0) {
             slider.bindTouchEvent(el, index);
             el.dataset.isbind = 1;
         }
-        // });
     },
     transform: function(translate) {
         this.style.webkitTransform = "translate3d(" + translate + "px,0,0)";
@@ -178,10 +178,10 @@ var slider = {
         var currImgIndex = 0; //主容器的标记（第几张图片）
         var tmpImgIndex = 0; //副容器的标记（第几张图片）
         var maxLen; //图片最大值
-        var boxW = document.documentElement.clientWidth - 30 || document.body.clientWidth - 30;
-        var boxH = document.querySelector(".show-img").clientHeight;
-        var tempImgs = [];
-        var who;
+        // var boxW = document.documentElement.clientWidth - 30 || document.body.clientWidth - 30;
+        // boxH = document.querySelector(".show-img").clientHeight;
+        var tempImgs = []; //加载的是转发者图片还是原创者图片
+        var who; //创建的是me 还是other
         el.addEventListener("touchstart", function(e) {
             who = oMaskBox.dataset.who;
             tempImgs = who == "me" ? myImgArr : otherImgArr;
@@ -338,19 +338,27 @@ var slider = {
                 self.transform.call(currentItem, translate);
                 self.transform.call(tmpBox, tmpTrans);
                 // var nowNum = currentItem.dataset.sIndex;
-                var nb = Array.prototype.slice.call(navBox.children);
-                nb.forEach(function(item, index) {
-                    item.className = "img-nav";
-                    addClass(nb[tmpImgIndex], "active");
-                })
-                var navWrap = document.querySelector(".nav-wrap");
-                if (maxLen > 5 && tmpImgIndex <= 2) {
-                    navWrap.scrollLeft = 0;
+                if (tmpBox.dataset.isCurr == 1) {
+                    var nb = Array.prototype.slice.call(navBox.children);
+                    nb.forEach(function(item, index) {
+                        item.className = "img-nav";
+                        addClass(nb[tmpImgIndex], "active");
+                    })
+
+                    var navWrap = document.querySelector(".nav-wrap");
+                    if (maxLen > 5 && tmpImgIndex <= 3) {
+                        // navWrap.scrollLeft = 0;
+                        navWrap.children[0].style.webkitTransform = "translateX(0px)";
+
+                    }
+                    if (maxLen > 5 && tmpImgIndex >= 5) {
+                        // navWrap.scrollLeft = navWrap.children[0].offsetWidth - navWrap.offsetWidth;
+                        navWrap.children[0].style.webkitTransform = "translateX(" + (-navWrap.children[0].offsetWidth + navWrap.offsetWidth) + "px)";
+
+                    }
+                    oImgNums.innerText = (tmpImgIndex + 1) + "/" + nb.length;
                 }
-                if (maxLen > 5 && tmpImgIndex >= 5) {
-                    navWrap.scrollLeft = navWrap.children[0].offsetWidth - navWrap.offsetWidth;
-                }
-                oImgNums.innerText = (tmpImgIndex + 1) + "/" + nb.length;
+
             }
         });
 
@@ -377,11 +385,14 @@ var slider = {
                 var nowIndex = Number(currentItem.dataset.sIndex);
                 tmpBox.dataset.sIndex = toIndex;
 
-                if (maxLen > 5 && toIndex <= 2) {
-                    _this.parentNode.scrollLeft = 0;
+                if (maxLen > 5 && toIndex <= 3) {
+                    // _this.parentNode.scrollLeft = 0;
+                    _this.style.webkitTransform = "translateX(0px)";
+
                 }
                 if (maxLen > 5 && toIndex >= 5) {
-                    _this.parentNode.scrollLeft = _this.offsetWidth - document.querySelector(".nav-wrap").offsetWidth;
+                    // _this.parentNode.scrollLeft = _this.offsetWidth - document.querySelector(".nav-wrap").offsetWidth;
+                    _this.style.webkitTransform = "translateX(" + (-_this.offsetWidth + document.querySelector(".nav-wrap").offsetWidth) + "px)";
                 }
 
                 if (toIndex == nowIndex) {
@@ -423,12 +434,12 @@ var slider = {
             }
         })
     },
+    // 渲染slider
     _render: function(index, len, who) {
         var self = this;
         var navStr = "";
         var sArr = who == "me" ? myImgArr : otherImgArr;
-        var boxW = document.documentElement.clientWidth - 30 || document.body.clientWidth - 30;
-        var boxH = document.querySelector(".show-img").clientHeight;
+        boxH = document.querySelector(".show-img").clientHeight;
         // var navW = ((boxW - 10) / len) > navBox.clientHeight ? navBox.clientHeight - 10 : ((boxW - 10) / len);
         var navW = navBox.clientHeight - 10;
 
@@ -442,6 +453,16 @@ var slider = {
             item.className = "img-nav";
             navArr[index].className = "img-nav active";
         })
+        var navWrap = document.querySelector(".nav-wrap");
+        if (len > 5 && index <= 3) {
+            navWrap.children[0].style.webkitTransform = "translateX(0)";
+            // navWrap.scrollLeft = 0;
+        }
+        if (len > 5 && index >= 5) {
+            // navWrap.scrollLeft = navWrap.children[0].offsetWidth - navWrap.offsetWidth;
+            navWrap.children[0].style.webkitTransform = "translateX(" + (-navWrap.children[0].offsetWidth + navWrap.offsetWidth) + "px)";
+            // navWrap.scrollLeft = navWrap.children[0].offsetWidth - navWrap.offsetWidth;
+        }
         var oCurr = document.querySelector(".s-current");
         oCurr.dataset.sIndex = index;
         var imgOpitons = sArr[index];
@@ -453,24 +474,14 @@ var slider = {
 
         self.init(oSliderBox, index);
     },
+    // 显示mask
     showMask: function(i, len, who) {
+
         oMaskBox.dataset.show = 1;
         oMaskBox.dataset.who = who;
         oMaskBox.style.display = "block";
         document.body.className = "lock";
         oImgNums.innerText = (Number(i) + 1) + "/" + len;
-        // var achild = _this.children;
-        // for (var j = 0; j < achild.length; j++) {
-        //     var temp = achild[j].children[0];
-        //     this.imgArr.push({
-        //         "index": temp.dataset.i,
-        //         "url": temp.dataset.echoBackground,
-        //         "isload": temp.dataset.isload,
-        //         "width": temp.dataset.w || 30,
-        //         "height": temp.dataset.h || 30,
-        //         "loadurl": "http://a.xnimg.cn/wap/mobile/2017activity/real-estate/img/loading.gif"
-        //     })
-        // }
         this._render(i, len, who);
     },
     // 隐藏mask
@@ -488,6 +499,8 @@ var slider = {
         o.style.opacity = 0;
         oMaskBox.dataset.show = 0;
         oMaskBox.dataset.who = "";
+        document.querySelector(".img-nav-box").style.webkitTransform = "";
+
     },
 }
 

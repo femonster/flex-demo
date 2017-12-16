@@ -90,8 +90,8 @@ body
                 height: ptr(155)
         .two-img
             .item-box,.img-item  
-                width: ptr(154)
-                height: ptr(154)
+                width: ptr(153)
+                height: ptr(153)
         .three-img
             .item-box,.img-item 
                 width: ptr(100)
@@ -373,14 +373,14 @@ body
         top: ptr(33)
     .show-img
         width: 100%
-        height: ptr(390)
+        height: 60%
         margin-top: ptr(74)
         box-sizing: border-box
         text-align: center
         .slider-box
             min-height: 100%
             position: relative
-            // border:1px solid #ffffff
+            border:1px solid #ffffff
             
             .s-item
                 height: 100%
@@ -407,8 +407,8 @@ body
         left: 5%
         position: absolute
         bottom: ptr(60)
-        overflow-y:hidden
-        overflow-x: auto
+        overflow:hidden
+        // overflow-x: auto
         .img-nav-box
             // width: 90%
             height: 100%
@@ -421,6 +421,7 @@ body
             display flex
             justify-content: center
             align-items: center
+            transition: 0.3s transform cubic-bezier(0, 0, 0.25, 1)
             div
                 // width: ptr(66)
                 // height: ptr(66)
